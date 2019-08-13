@@ -16,11 +16,14 @@ buildscript {
 ```
 app modules 中
 
-compile 'com.dylan:photopicker:1.0.0'
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile 'com.dylan:photopicker:1.0.0'
+}
 ```
 
 # 选择图片跳转
-
+```
 public void openPicker(View view) {
         Intent intent = new Intent(view.getContext(), PhotoPickerActivity.class);
         intent.putExtra(PhotoPickerActivity.EXTRA_MAX_SELECT,3);
@@ -29,6 +32,9 @@ public void openPicker(View view) {
        // intent.putExtra(PhotoPickerActivity.EXTRA_LIMIT_SELECT_TIP,"不可以再选了");
         startActivityForResult(intent, 1001);
     }
+```
+
+
 
 # 选择图片的路径数组
 ```
@@ -48,4 +54,7 @@ public void openPicker(View view) {
     
     
     
-![image](https://github.com/dylan0755/PhotoPicker/blob/master/gif/video.gif)
+
+![image](https://github.com/dylan0755/PhotoPicker/blob/master/gif/part1.gif)
+![image](https://github.com/dylan0755/PhotoPicker/blob/master/gif/part2.gif)
+![image](https://github.com/dylan0755/PhotoPicker/blob/master/gif/part3.gif)
