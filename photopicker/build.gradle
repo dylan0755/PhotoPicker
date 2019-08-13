@@ -1,0 +1,55 @@
+apply plugin: 'com.android.library'
+apply plugin: 'com.novoda.bintray-release'//添加
+android {
+    compileSdkVersion 24
+    buildToolsVersion '26.0.2'
+
+    defaultConfig {
+        minSdkVersion 14
+        targetSdkVersion 23
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+
+    lintOptions{
+        abortOnError false
+    }
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    testCompile 'junit:junit:4.12'
+    compile 'com.android.support:appcompat-v7:24.2.0'
+
+}
+
+//添加
+publish {
+    userOrg = 'dylan0759'             //如果账户是个人版本，则这里填的是用户名，如果是企业版这里写的是 organization
+    groupId = 'com.dylan'//jcenter上的路径
+    artifactId = 'photopicker'//项目名称             //在maven下创建的包名,建议不要在后台创建，让这部分配置自动创建
+    publishVersion = '1.0.0'//版本号gra         //当涉及到更新的时候只要改动版本号即可
+    desc = 'tool for Android development'//描述，不重要
+    website = 'https://github.com/dylan/libraray'//网站，不重要；尽量模拟github上的地址，例如我这样的；当然你有地址最好了
+}
+//上传
+/*
+gradlew clean build bintrayUpload
+-PbintrayUser=dylan0759
+-PbintrayKey=aeba2dbf3a2e737464ec7e3197fd78be3f950a1a
+-PdryRun=false
+
+*/

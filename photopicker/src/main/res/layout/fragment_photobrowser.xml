@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             android:id="@+id/contentLayout"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:background="#191919">
+
+
+    <com.dylan.photopicker.api.PhotoViewPager
+        android:id="@+id/vp_photo"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+
+    <!--顶部-->
+    <FrameLayout
+        android:id="@+id/toplayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <!--标题栏-->
+        <RelativeLayout
+            android:id="@+id/rl_titleBar"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="22dp"
+            android:background="@color/picker_titlebar">
+
+            <LinearLayout
+                android:id="@+id/picker_back"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/iv_back"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="20px"
+                    android:padding="4dp"
+                    android:src="@mipmap/return_gray"
+                    android:tint="#ffffff"
+                    />
+
+                <TextView
+                    android:id="@+id/left_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="30px"
+                    android:layout_toRightOf="@id/iv_back"
+                    android:background="#0000"
+                    android:gravity="center_vertical"
+                    android:textColor="#FFFFFF"
+                    android:textSize="18sp"/>
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/browseritem_select"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:padding="3dp"
+                android:clickable="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerInParent="true"
+                android:layout_marginRight="25dp"
+                android:src="@mipmap/ic_checkbox_unselect_small"
+                />
+        </RelativeLayout> <!--标题栏-->
+
+        <!--状态栏背景-->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="22dp"
+            android:background="@color/status_bar_color"/>
+    </FrameLayout><!--顶部-->
+
+
+</FrameLayout>

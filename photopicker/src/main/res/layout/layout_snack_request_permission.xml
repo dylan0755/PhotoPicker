@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="60dp"
+    android:background="#ffffff"
+    android:id="@+id/ll_permission_request"
+    android:layout_gravity="bottom"
+    android:visibility="gone">
+
+    <TextView
+        android:id="@+id/tv_permission_message"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:layout_gravity="center_vertical"
+        android:textColor="#333333"
+        android:textSize="16dp"
+        android:paddingRight="8dp"
+        android:paddingLeft="16dp"
+        android:gravity="center|left"
+        />
+
+    <TextView
+        android:id="@+id/tv_go"
+        android:layout_width="80dp"
+        android:layout_height="45dp"
+        android:text="立即前往"
+        android:textSize="16dp"
+        android:gravity="center"
+        android:layout_marginRight="15dp"
+        android:layout_gravity="center_vertical"/>
+</LinearLayout>

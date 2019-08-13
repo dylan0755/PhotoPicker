@@ -1,0 +1,152 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#ffffff"
+   >
+
+    <RelativeLayout
+        android:id="@+id/rl_titleBar"
+        android:layout_width="match_parent"
+        android:layout_height="42dp"
+        android:background="#ffffff">
+        <LinearLayout
+            android:id="@+id/picker_back"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/iv_back"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="20px"
+                android:padding="4dp"
+                android:src="@mipmap/return_gray"
+                android:tint="#000000"
+                />
+
+            <TextView
+                android:id="@+id/left_title"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="4dp"
+                android:background="#0000"
+                android:gravity="center_vertical"
+                android:textColor="#000000"
+                android:textSize="16sp"/>
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"/>
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical">
+                <ImageView
+                    android:id="@+id/iv_open_camera"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:padding="6dp"
+                    android:layout_marginRight="15dp"
+                    android:src="@mipmap/ic_camera"
+                    android:tint="#000000"
+                    android:visibility="gone"/>
+                <LinearLayout
+                    android:id="@+id/llOpenDrawTop"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="15dp"
+                    android:visibility="gone">
+                    <ImageView
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_gravity="center_vertical"
+                        android:background="#0000"
+                        android:src="@mipmap/ic_album_normal"
+                        android:tint="#000000"
+                        android:layout_marginLeft="25dp"
+                        />
+                    <ImageView
+                        android:layout_width="9dp"
+                        android:layout_height="9dp"
+                        android:src="@mipmap/ic_folder_flag"
+                        android:layout_gravity="bottom"
+                        android:tint="#000000"
+                        android:layout_marginLeft="-5dp"/>
+                </LinearLayout>
+            </FrameLayout>
+
+        </LinearLayout>
+    </RelativeLayout>
+
+   <FrameLayout
+       android:layout_width="match_parent"
+       android:layout_height="match_parent">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="#ffffff" >
+            <include layout="@layout/picker_drawerlayout"/>
+        </LinearLayout>
+
+
+
+        <LinearLayout
+            android:id="@+id/llMultiChooseBottomBar"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:background="@color/picker_titlebar">
+
+            <ImageView
+                android:id="@+id/bt_expand_drawer"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_gravity="center_vertical"
+                android:background="#0000"
+                android:src="@mipmap/ic_album_normal"
+                android:tint="@color/white"
+                android:layout_marginLeft="25dp"
+                />
+            <ImageView
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                android:src="@mipmap/ic_folder_flag"
+                android:layout_gravity="bottom"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="-5dp"/>
+            <View
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"/>
+            <Button
+                android:id="@+id/bt_finish_picker"
+                android:layout_width="wrap_content"
+                android:minWidth="72dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="完 成"
+                android:textColor="#6c9f6e"
+                android:background="@drawable/shape_solid_green_unselect"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginBottom="6dp"
+                android:textSize="14sp"/>
+        </LinearLayout>
+    </LinearLayout>
+
+
+    <include layout="@layout/layout_snack_request_permission"/>
+   </FrameLayout>
+
+</LinearLayout>

@@ -1,0 +1,41 @@
+<android.support.v4.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/picker_drawer_ly"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+
+
+        <GridView
+            android:id="@+id/id_gridview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="2dp"
+            android:numColumns="4"
+            android:listSelector="#0000"
+            android:horizontalSpacing="2dp"
+            android:verticalSpacing="2dp"
+            />
+
+
+
+
+    <LinearLayout
+        android:id="@+id/draw_right_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="right"
+        android:background="#ffffff">
+        <ListView
+            android:id="@+id/right_folder_listview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="#e3e3e3"
+            android:dividerHeight="0.1px"
+            />
+
+    </LinearLayout>
+
+
+</android.support.v4.widget.DrawerLayout>
