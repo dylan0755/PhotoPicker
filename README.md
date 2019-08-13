@@ -1,6 +1,5 @@
-# PhotoPicker
 
-#添加依赖  工程build 加上JCenter
+# 添加依赖  工程build 加上JCenter
 
 buildscript {
     repositories {
@@ -26,3 +25,6 @@ intent.putExtra(PhotoPickerActivity.EXTRA_SHOW_CAMERA_MULTI_CHOICE,false);//多�
 //intent.putExtra(PhotoPickerActivity.EXTRA_LIMIT_SELECT_TIP,"最多只能选9张图片哦");
 
 startActivityForResult(intent, 1001);
+
+
+![image](https://github.com/dylan0755/PhotoPicker/blob/master/gif/video.gif)
