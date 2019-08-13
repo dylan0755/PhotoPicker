@@ -14,15 +14,11 @@ import com.dylan.photopicker.app.PhotoPickerActivity;
 
 public class MainActivity extends AppCompatActivity {
    private TextView tvSelected;
-    private PhotoView ivPhoto;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         tvSelected= (TextView) findViewById(R.id.tv_selected);
-        ivPhoto= (PhotoView) findViewById(R.id.pv);
-        final Bitmap bitmap= BitmapFactory.decodeResource(getResources(),R.mipmap.ic_launcher);
-        ivPhoto.setImageBitmap(bitmap);
     }
 
 
