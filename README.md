@@ -1,6 +1,7 @@
 
 # 添加依赖  工程build 加上JCenter
 
+```
 buildscript {
     repositories {
         jcenter()
@@ -10,11 +11,13 @@ buildscript {
      .....
     }
 }
+```
 
+```
 app modules 中
 
 compile 'com.dylan:photopicker:1.0.0'
-
+```
 
 # 选择图片跳转
 
@@ -28,7 +31,7 @@ public void openPicker(View view) {
     }
 
 # 选择图片的路径数组
-
+```
  @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 1001) {
@@ -39,4 +42,10 @@ public void openPicker(View view) {
             }
         }
     }
+ ```   
+    
+    
+    
+    
+    
 ![image](https://github.com/dylan0755/PhotoPicker/blob/master/gif/video.gif)
