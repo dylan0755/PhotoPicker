@@ -1,5 +1,24 @@
 # PhotoPicker
 
+#添加依赖  工程build 加上JCenter
+
+buildscript {
+    repositories {
+        jcenter()
+        google()
+    }
+    dependencies {
+     .....
+    }
+}
+
+app modules 中
+
+compile 'com.dylan:photopicker:1.0.0'
+
+
+# 打开
+
 Intent intent = new Intent(view.getContext(), PhotoPickerActivity.class);
 intent.putExtra(PhotoPickerActivity.EXTRA_MAX_SELECT,3); //单选 传1，多选大于1即可
 intent.putExtra(PhotoPickerActivity.EXTRA_SHOW_CAMERA_MULTI_CHOICE,false);//多选的时候显示相机入口
