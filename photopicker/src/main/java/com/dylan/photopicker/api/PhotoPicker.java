@@ -5,26 +5,25 @@ package com.dylan.photopicker.api;
  */
 
 
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
-import android.provider.MediaStore;
-import android.provider.MediaStore.Images;
 import android.util.Log;
 import android.widget.Toast;
+
+import com.dylan.library.io.FileUtils;
+import com.dylan.library.media.MediaStoreLoader;
+import com.dylan.library.media.PictureDirectory;
+import com.dylan.library.utils.EmptyUtils;
 
 import java.io.File;
 import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -32,7 +31,7 @@ import java.util.List;
 public class PhotoPicker {
     private Context mContext;
     private Handler mHanlder;
-    private List<PhotoAlbum> photoAlbumList;
+    private List<PhotoDirectory> photoDirectoryList;
     private List<PhotoBean> mSelectList;
     private List<PhotoBean> mRecentlyList;//最近的
     private PhotoFileNameFilter mFilter;
@@ -48,7 +47,7 @@ public class PhotoPicker {
         mContext = context;
         mSelectList = new ArrayList<>();
         mRecentlyList = new ArrayList<>();
-        photoAlbumList = new ArrayList<>();
+        photoDirectoryList = new ArrayList<>();
         mFilter = new PhotoFileNameFilter();
         mHanlder = new Handler() {
             @Override
@@ -83,33 +82,10 @@ public class PhotoPicker {
         }
         new Thread() {
             public void run() {
-                Uri uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-                ContentResolver resolver = mContext.getContentResolver();
-                String selection = "0=0) group by (" + Images.Media.BUCKET_DISPLAY_NAME;
-                String[] projects = {Images.Media.BUCKET_DISPLAY_NAME, "count(*) as image_count"};
-                Cursor cursor = resolver.query(uri, projects, selection, null, Images.Media._ID + " desc");
-                if (cursor==null){
-                    mHanlder.sendEmptyMessage(FIND_FINISH);
-                    return;
-                }
-                while (cursor.moveToNext()) {
-                    String bucketDisplayName = cursor.getString(cursor.getColumnIndex(Images.Media.BUCKET_DISPLAY_NAME));
-                    int bucketChildCount = cursor.getInt(cursor.getColumnIndex("image_count"));
-                    PhotoAlbum bean = new PhotoAlbum();
-                    bean.setName(bucketDisplayName);
-                    bean.setChildCount(bucketChildCount);
-                    photoAlbumList.add(bean);
-                }
-                cursor.close();
-                //获取文件夹的路径和文件夹默认图片路径
-                if (photoAlbumList != null) {
-                    for (PhotoAlbum album : photoAlbumList) {
-                        String firstChildPath = getPathByDirName(resolver, album.getName());
-                        if (firstChildPath != null && !firstChildPath.isEmpty()) {
-                            album.setFirstChildPath(firstChildPath);
-                            File file = new File(firstChildPath);
-                            album.setDirPath(file.getParentFile().getAbsolutePath());
-                        }
+               List<PictureDirectory> directoryList=MediaStoreLoader.getPictureDirectoryFromImageStore(mContext);
+                if (EmptyUtils.isNotEmpty(directoryList)){
+                    for (PictureDirectory directory:directoryList){
+                         photoDirectoryList.add(PhotoDirectory.dto(directory));
                     }
                 }
                 mHanlder.sendEmptyMessage(FIND_FINISH);
@@ -129,8 +105,8 @@ public class PhotoPicker {
         mSelectList.clear();
         if (mRecentlyList.isEmpty()) {
             List<File> recentList = new ArrayList<>();
-            for (PhotoAlbum bean : photoAlbumList) {
-                if (defaultDirName.equals(bean.getName())) continue;
+            for (PhotoDirectory bean : photoDirectoryList) {
+                if (defaultDirName.equals(bean.getDirName())) continue;
                 recentList.addAll(findRecentlyInDir(bean));
             }
             sortPicFilesOrderByTime(recentList);
@@ -183,28 +159,28 @@ public class PhotoPicker {
     private void findRecentlyWhileScanFinish() {
         //保存每个文件夹下符合最近x月要求的图片
         List<File> recentFiles = new ArrayList<>();
-        for (PhotoAlbum bean : photoAlbumList) {
+        for (PhotoDirectory bean : photoDirectoryList) {
             recentFiles.addAll(findRecentlyInDir(bean));
         }
-        if (!recentFiles.isEmpty()) {
+        if (EmptyUtils.isNotEmpty(recentFiles)) {
             sortPicFilesOrderByTime(recentFiles);//排序
             for (File f : recentFiles) {
                 mRecentlyList.add(new PhotoBean(f.getAbsolutePath()));
             }
         }
         //添加默认的文件夹
-        PhotoAlbum bean = new PhotoAlbum();
-        bean.setName(defaultDirName);
+        PhotoDirectory bean = new PhotoDirectory();
+        bean.setDirName(defaultDirName);
         bean.setDirPath(default_dirpath);
-        if (!mRecentlyList.isEmpty()) {
+        if (EmptyUtils.isNotEmpty(mRecentlyList)) {
             bean.setChildCount(mRecentlyList.size());
             bean.setFirstChildPath(mRecentlyList.get(0).getPath());
         }
 
-        photoAlbumList.add(0, bean);
+        photoDirectoryList.add(0, bean);
         if (mOperatorListener != null) {
-            mOperatorListener.scanFinish(photoAlbumList);
-            if (!mRecentlyList.isEmpty()) mOperatorListener.loadFromDir(default_dirpath, mRecentlyList);
+            mOperatorListener.scanFinish(photoDirectoryList);
+            if (EmptyUtils.isNotEmpty(mRecentlyList)) mOperatorListener.loadFromDir(default_dirpath, mRecentlyList);
 
         }
 
@@ -214,7 +190,7 @@ public class PhotoPicker {
 
 
     //找出该文件夹下最近几个月的图片
-    private List<File> findRecentlyInDir(PhotoAlbum bean) {
+    private List<File> findRecentlyInDir(PhotoDirectory bean) {
         File dir = new File(bean.getDirPath());
         File[] files = dir.listFiles(mFilter);
         List<File> list = new ArrayList<>();
@@ -229,54 +205,15 @@ public class PhotoPicker {
         }
         if (files.length!=bean.getChildCount()){
             notifyToScan(mContext,bean.getDirPath());
-            Log.e("photopicker","通知更新文件");
         }
         return list;
     }
 
 
 
-
-
-    private String getPathByDirName(ContentResolver cr, String bucketDisplayName) {
-        String[] projection = {Images.Media._ID, Images.Media.DATA};
-        Cursor cursor = cr.query(Images.Media.EXTERNAL_CONTENT_URI, projection,
-                Images.Media.BUCKET_DISPLAY_NAME + "='" + bucketDisplayName + "'",
-                null, Images.Media._ID + " desc limit 1");
-        if (cursor==null)return "";
-        if (cursor.moveToFirst()) {
-            String firtImagePath = cursor.getString(cursor.getColumnIndex(Images.Media.DATA));//该路径为大图的路径  有时可能我们会去获取缩略图，所以需要查看缩略图
-            cursor.close();
-            return firtImagePath;
-        }
-        cursor.close();
-        return "";
-    }
-
-
     //对照片按时间排序
     private void sortPicFilesOrderByTime(List<File> recentList) {
-        if (recentList==null||recentList.isEmpty())return;
-
-        Collections.sort(recentList, new Comparator<File>() {
-            @Override
-            public int compare(File o1, File o2) {
-                try {
-                    //  jdk 7 的排序，不能使用下面的，否则会报错
-                    return o1.lastModified()== o2.lastModified() ? 0 :
-                            (o1.lastModified() > o2.lastModified() ? -1 :0);
-                }catch (Exception e){
-                    return 0;
-                }
-
-/**
-//
-//                if (o1.lastModified() > o2.lastModified())//时间大的排在后面
-//                    return -1;
-//                else
-//                    return 1; **/
-            }
-        });
+        FileUtils.sortDESC(recentList);
     }
 
     /**
@@ -298,7 +235,7 @@ public class PhotoPicker {
     private OperatorListener mOperatorListener;
 
     public interface OperatorListener {
-        void scanFinish(List<PhotoAlbum> list);
+        void scanFinish(List<PhotoDirectory> list);
 
         void loadFromDir(String dirPath, List<PhotoBean> picList);
     }
@@ -326,11 +263,7 @@ public class PhotoPicker {
     public void notifyToScan(Context context, String filePath) {
         try{
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                Intent mediaScanIntent = new Intent(
-                        Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-                Uri contentUri = Uri.fromFile(new File(filePath));
-                mediaScanIntent.setData(contentUri);
-                context.sendBroadcast(mediaScanIntent);
+                FileUtils.notifyScanFile(context,filePath);
             } else {
                 context.sendBroadcast(new Intent(
                         Intent.ACTION_MEDIA_MOUNTED,

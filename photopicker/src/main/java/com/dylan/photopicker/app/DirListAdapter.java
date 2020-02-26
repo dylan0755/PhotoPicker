@@ -13,7 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.dylan.photopicker.R;
-import com.dylan.photopicker.api.PhotoAlbum;
+import com.dylan.photopicker.api.PhotoDirectory;
 import com.dylan.photopicker.api.ImageLoader;
 
 import java.util.HashSet;
@@ -27,14 +27,14 @@ public class DirListAdapter extends BaseAdapter {
     private LayoutInflater mInflater;
     private Set<String> mCheckBoxSet = new HashSet<String>();
     private DirSelectListener mListener;
-    private List<PhotoAlbum> mDatas;
+    private List<PhotoDirectory> mDatas;
     private int currentIndex = 0;
 
     public DirListAdapter() {
 
     }
 
-    public void bind(List<PhotoAlbum> objects) {
+    public void bind(List<PhotoDirectory> objects) {
         if (objects != null && !objects.isEmpty()) {
             mDatas = objects;
             mCheckBoxSet.add(objects.get(0).getDirPath());
@@ -49,7 +49,7 @@ public class DirListAdapter extends BaseAdapter {
     }
 
     @Override
-    public PhotoAlbum getItem(int position) {
+    public PhotoDirectory getItem(int position) {
         return mDatas.get(position);
     }
 
@@ -69,13 +69,13 @@ public class DirListAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        final PhotoAlbum bean = getItem(position);
+        final PhotoDirectory bean = getItem(position);
         holder.mCheckBoxIv.setVisibility(View.GONE);
         holder.mImag.setImageResource(R.mipmap.ic_nopic);
         ImageLoader.getInstance(3, ImageLoader.Type.LIFO).loadImage(bean.getFirstChildPath(), holder.mImag);
 
 
-        holder.mDirName.setText(bean.getName());
+        holder.mDirName.setText(bean.getDirName());
         holder.mDirChildCount.setText(bean.getChildCount() + "张");
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,7 +86,7 @@ public class DirListAdapter extends BaseAdapter {
                 mCheckBoxSet.add(bean.getDirPath());
                 notifyDataSetChanged();
                 if (mListener != null) {
-                    mListener.selectDir(bean.getName(), bean.getDirPath());
+                    mListener.selectDir(bean.getDirName(), bean.getDirPath());
                 }
 
             }

@@ -27,7 +27,7 @@ import android.widget.Toast;
 
 import com.dylan.photopicker.R;
 import com.dylan.photopicker.api.BasePickerActivity;
-import com.dylan.photopicker.api.PhotoAlbum;
+import com.dylan.photopicker.api.PhotoDirectory;
 import com.dylan.photopicker.api.PhotoBean;
 import com.dylan.photopicker.api.PhotoPicker;
 import com.dylan.photopicker.api.listener.BrowserOperatorListener;
@@ -157,7 +157,7 @@ public class PhotoPickerActivity extends BasePickerActivity implements View.OnCl
         //扫描包含图片文件夹，
         mPicker.setOperatorListener(new PhotoPicker.OperatorListener() {
             @Override
-            public void scanFinish(List<PhotoAlbum> list) {
+            public void scanFinish(List<PhotoDirectory> list) {
                 dirAdapter.bind(list);
                 tv_dir_name.setText(PhotoPicker.defaultDirName);
             }
